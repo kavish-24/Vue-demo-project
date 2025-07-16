@@ -1,42 +1,81 @@
 <template>
-  <q-page class="q-pa-md column q-gutter-md items-center">
-    <div style="width: 300px">
-      <q-input filled v-model="username" label="Username" />
-      <q-input filled type="password" v-model="password" label="Password" />
-      <q-btn label="Login" color="primary" @click="handleLogin" class="full-width q-mt-sm" />
-      <q-banner v-if="error" class="bg-red text-white q-mt-sm">
-        Invalid username
-      </q-banner>
-    </div>
+  <q-page class="flex flex-center bg-grey-2">
+    <q-card class="q-pa-lg shadow-2" style="width: 350px; max-width: 90vw">
+      <q-card-section class="text-h6 text-primary text-center">
+        🔐Login
+      </q-card-section>
+
+      <q-separator />
+
+      <q-card-section class="q-gutter-md">
+        <q-input
+          filled
+          v-model="username"
+          label="Username"
+          dense
+          :rules="[val => !!val || 'Username is required']"
+        />
+       <q-input
+  filled
+  v-model="password"
+  label="Password"
+  :type="isPwdVisible ? 'text' : 'password'"
+  dense
+  :rules="[val => !!val || 'Password is required']"
+>
+  <template v-slot:append>
+    <q-icon
+      :name="isPwdVisible ? 'visibility' : 'visibility_off'"
+      class="cursor-pointer"
+      @click="isPwdVisible = !isPwdVisible"
+    />
+  </template>
+</q-input>
+
+
+        <q-btn
+          label="Login"
+          color="primary"
+          @click="handleLogin"
+          class="full-width"
+        />
+
+        <q-banner
+          v-if="error"
+          class="bg-red text-white q-mt-sm"
+          dense
+          rounded
+        >
+          ⚠️ Invalid username or password
+        </q-banner>
+      </q-card-section>
+    </q-card>
   </q-page>
 </template>
 
-<script >
-import { ref } from 'vue'
+<script>
 import { useRouter } from 'vue-router'
 import { useUserStore } from 'src/stores/user'
 
 export default {
-  name:'LoginPage',
-  data(){
+  name: 'LoginPage',
+
+  data() {
     return {
       username: '',
       password: '',
-      error: false
-    }
-  },  
-
-setup() {
-    const router = useRouter()
-    const userStore = useUserStore()
-
-    return {
-      router,
-      userStore
+      error: false,
+      isPwdVisible: false
     }
   },
- 
-methods: {
+
+  created() {
+    // 🔐 Force logout as soon as login page loads
+    const store = useUserStore()
+    store.logout()
+  },
+
+  methods: {
     handleLogin() {
       const user = this.userStore.login(this.username, this.password)
 
@@ -45,13 +84,22 @@ methods: {
         return
       }
 
+      // ✅ Mark this tab as logged in
+      sessionStorage.setItem('currentUser', JSON.stringify(user))
+      sessionStorage.setItem('loggedIn', 'true')
+
       if (user.designation === 'admin') {
-        this.router.push('/admin')
+        this.$router.push('/admin')
       } else {
-        this.router.push('/user')
+        this.$router.push('/user')
       }
     }
+  },
+
+  computed: {
+    userStore() {
+      return useUserStore()
+    }
   }
-  
 }
 </script>

@@ -1,125 +1,101 @@
 <template>
   <q-page class="q-pa-md flex flex-center">
-    <q-card class="q-pa-lg" style="max-width: 500px; width: 100%">
+    <q-card class="q-pa-lg" style="max-width: 600px; width: 100%">
       <q-card-section>
-        <div class="text-h6">👤 Welcome {{ user.fullName }} ({{ user.designation }})</div>
+        <div class="text-h6 text-primary text-center">
+          👤 Welcome {{ user.fullName }} ({{ user.designation }})
+        </div>
       </q-card-section>
 
-      <q-separator color="black"/>
+      <q-separator />
 
       <q-card-section>
-        <q-item>
-          <q-item-section>
-            <q-item-label><b>Username:</b></q-item-label>
-            <q-item-label caption>{{ user.username }}</q-item-label>
-          </q-item-section>
-        </q-item>
+        <div class="q-gutter-sm">
+          <div class="row q-col-gutter-md">
+            <div class="col-6"><b>Username:</b></div>
+            <div class="col-6">{{ user.username }}</div>
 
-        <q-item>
-          <q-item-section>
-            <q-item-label><b>Full Name:</b></q-item-label>
-            <q-item-label caption>{{ user.fullName }}</q-item-label>
-          </q-item-section>
-        </q-item>
+            <div class="col-6"><b>Full Name:</b></div>
+            <div class="col-6">{{ user.fullName }}</div>
 
-        <q-item>
-          <q-item-section>
-            <q-item-label><b>Email:</b></q-item-label>
-            <q-item-label caption>{{ user.email }}</q-item-label>
-          </q-item-section>
-        </q-item>
+            <div class="col-6"><b>Email:</b></div>
+            <div class="col-6">{{ user.email }}</div>
 
-        <q-item>
-          <q-item-section>
-            <q-item-label><b>Phone:</b></q-item-label>
-            <q-item-label caption>{{ user.phone }}</q-item-label>
-          </q-item-section>
-        </q-item>
+            <div class="col-6"><b>Phone:</b></div>
+            <div class="col-6">{{ user.phone }}</div>
 
-        <q-item>
-          <q-item-section>
-            <q-item-label><b>Designation:</b></q-item-label>
-            <q-item-label caption>{{ user.designation }}</q-item-label>
-          </q-item-section>
-        </q-item>
+            <div class="col-6"><b>Designation:</b></div>
+            <div class="col-6">{{ user.designation }}</div>
 
-        <q-item v-if="user.designation === 'user'">
-          <q-item-section>
-            <q-item-label><b>User ID:</b></q-item-label>
-            <q-item-label caption>{{ user.userId }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      <q-item>
-  <q-item-section>
-    <q-item-label><b>Password:</b></q-item-label>
-    <q-item-label caption>
-      {{ isPwdVisible ? user.password : '••••••••' }}
-    </q-item-label>
-  </q-item-section>
+            <div v-if="user.designation === 'user'" class="col-6"><b>User ID:</b></div>
+            <div v-if="user.designation === 'user'" class="col-6">{{ user.userId }}</div>
 
-  <q-item-section side>
-    <q-icon
-      :name="isPwdVisible ? 'visibility' : 'visibility_off'"
-      class="cursor-pointer"
-      @click="isPwdVisible = !isPwdVisible"
-    />
-  </q-item-section>
-</q-item>
-
-       
+            <div class="col-6"><b>Password:</b></div>
+            <div class="col-6 row items-center">
+              {{ isPwdVisible ? user.password : '••••••••' }}
+              <q-icon
+                :name="isPwdVisible ? 'visibility' : 'visibility_off'"
+                class="cursor-pointer q-ml-sm"
+                @click="isPwdVisible = !isPwdVisible"
+              />
+            </div>
+          </div>
+        </div>
       </q-card-section>
 
-      <q-separator color="black"/>
+      <q-separator />
 
       <q-card-actions align="center">
-  <q-btn label="Edit Profile" icon="edit" color="primary" @click="editUser(user)" />
-  <q-btn label="Logout" color="negative" @click="logout" />
-</q-card-actions>
+        <q-btn label="Edit Profile" icon="edit" color="primary" @click="editUser(user)" />
+        <q-btn label="Logout" color="negative" @click="logout" />
+      </q-card-actions>
     </q-card>
-    <q-dialog v-model="editDialog">
-      <q-card style="min-width: 400px">
-      <q-card-section>
-      <q-input v-model="editUserData.username" label="Username" filled />
-      <q-input v-model="editUserData.fullName" label="Full Name" filled />
-      <q-input v-model="editUserData.email" label="Email" filled />
-      <q-input v-model="editUserData.phone" label="Phone" filled />
-      <q-select
-        v-model="editUserData.designation"
-        :options="['admin', 'user']"
-        label="Designation"
-        filled
-      />
-      <q-input
-        v-if="editUserData.designation === 'user'"
-        v-model="editUserData.userId"
-        label="User ID"
-        filled
-      />
-       <q-input
-  v-model="editUserData.password"
-  :type="isPwdVisible ? 'text' : 'password'"
-  label="Password"
-  filled>
-  <template v-slot:append>
-    <q-icon
-      :name="isPwdVisible ? 'visibility' : 'visibility_off'"
-      class="cursor-pointer"
-      @click="isPwdVisible = !isPwdVisible"
-    />
-  </template>
-</q-input>
-    </q-card-section>
 
-    <q-card-actions align="right">
-      <q-btn flat label="Cancel" color="primary" v-close-popup />
-      <q-btn flat label="Save" color="positive" @click="saveUserEdit" />
-    </q-card-actions>
-  </q-card>
-</q-dialog>
- 
+    <!-- Edit Dialog -->
+    <q-dialog v-model="editDialog">
+      <q-card style="width: 100%; max-width: 500px;">
+        <q-card-section class="text-h6 text-primary">
+          ✏️ Edit Profile
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-section class="q-gutter-md">
+          <q-input v-model="editUserData.fullName" label="Full Name" filled />
+          <q-input v-model="editUserData.email" label="Email" filled />
+          <q-input v-model="editUserData.phone" label="Phone" filled />
+          <q-select v-model="editUserData.designation" :options="['admin', 'user']" label="Designation" filled />
+          <q-input
+            v-if="editUserData.designation === 'user'"
+            v-model="editUserData.userId"
+            label="User ID"
+            filled
+          />
+          <q-input
+            v-model="editUserData.password"
+            :type="isPwdVisible ? 'text' : 'password'"
+            label="Password"
+            filled
+          >
+            <template v-slot:append>
+              <q-icon
+                :name="isPwdVisible ? 'visibility' : 'visibility_off'"
+                class="cursor-pointer"
+                @click="isPwdVisible = !isPwdVisible"
+              />
+            </template>
+          </q-input>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="primary" v-close-popup />
+          <q-btn flat label="Save" color="positive" @click="saveUserEdit" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
-  
 </template>
+
 
 <script>
 import { useUserStore } from 'stores/user'
