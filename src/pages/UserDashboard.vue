@@ -27,8 +27,8 @@
             <div class="col-6"><b>Designation:</b></div>
             <div class="col-6">{{ user.designation }}</div>
 
-            <div v-if="user.designation === 'user'" class="col-6"><b>User ID:</b></div>
-            <div v-if="user.designation === 'user'" class="col-6">{{ user.userId }}</div>
+            <div class="col-6"><b>User ID:</b></div>
+            <div class="col-6">{{ user.userId }}</div>
 
             <div class="col-6"><b>Password:</b></div>
             <div class="col-6 row items-center">
@@ -51,7 +51,7 @@
       </q-card-actions>
     </q-card>
 
-    <!-- Edit Dialog -->
+ 
     <q-dialog v-model="editDialog">
       <q-card style="width: 100%; max-width: 500px;">
         <q-card-section class="text-h6 text-primary">
@@ -64,13 +64,7 @@
           <q-input v-model="editUserData.fullName" label="Full Name" filled />
           <q-input v-model="editUserData.email" label="Email" filled />
           <q-input v-model="editUserData.phone" label="Phone" filled />
-          <q-select v-model="editUserData.designation" :options="['admin', 'user']" label="Designation" filled />
-          <q-input
-            v-if="editUserData.designation === 'user'"
-            v-model="editUserData.userId"
-            label="User ID"
-            filled
-          />
+          
           <q-input
             v-model="editUserData.password"
             :type="isPwdVisible ? 'text' : 'password'"

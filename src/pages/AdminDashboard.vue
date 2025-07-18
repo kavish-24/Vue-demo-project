@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md bg-grey-1">
     <q-card flat bordered class="q-pa-lg q-mx-auto shadow-4" style="max-width: 800px; border-radius: 12px;">
-      <!-- Welcome Header -->
+     
       <q-card-section class="text-center">
         <div class="text-h5 text-primary">
           👋 Welcome, {{ userStore.currentUser.fullName }} <span class="text-subtitle2">(Admin)</span>
@@ -10,7 +10,7 @@
 
       <q-separator />
 
-      <!-- User Creation -->
+      
       <q-card-section>
         <div class="text-subtitle1 text-bold q-mb-md">👤 Create New User</div>
         <component
@@ -22,7 +22,7 @@
         />
       </q-card-section>
 
-      <!-- Actions -->
+     
       <q-card-actions align="center" class="q-mt-md">
         <q-btn label="Logout" color="negative" icon="logout" @click="logout" />
         <q-btn label="View Users" color="primary" icon="group" class="q-ml-md" @click="showUserList = true" />
@@ -30,7 +30,7 @@
       </q-card-actions>
     </q-card>
 
-    <!-- User List Dialog -->
+    
     <q-dialog v-model="showUserList" persistent>
       <q-card class="shadow-10" style="width: 90vw; max-width: 1000px; border-radius: 12px;">
         <q-card-section class="row items-center">

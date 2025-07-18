@@ -68,7 +68,7 @@
           </q-item>
         </q-list>
 
-        <!-- ✅ Copy message -->
+        
         <q-banner
           v-if="copied"
           class="bg-positive text-white q-mt-md"
@@ -78,7 +78,7 @@
         </q-banner>
       </q-card-section>
 
-      <!-- Create Button -->
+    
       <q-card-actions align="right">
         <q-btn label="Create New User" color="positive" icon="check_circle" @click="done" />
       </q-card-actions>
@@ -87,45 +87,59 @@
 </template>
 
 
-<script setup>
-import { ref, onMounted } from "vue";
+<script>
+export default {
+  name: 'StepThreeForm',
 
-const props = defineProps(["user"]);
-const emit = defineEmits(["done", "update-user"]);
+  props: {
+    user: {
+      type: Object,
+      required: true
+    }
+  },
 
-const copied = ref(false); // show copy success message
+  emits: ['done', 'update-user'],
 
-function generateRandomPassword(length = 8) {
-  const chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
-  let password = "";
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * chars.length);
-    password += chars[randomIndex];
-  }
-  return password;
-}
+  data() {
+    return {
+      copied: false
+    }
+  },
 
-onMounted(() => {
-  if (!props.user.password) {
-    const newPassword = generateRandomPassword();
-    emit("update-user", { password: newPassword });
-  }
-});
+  mounted() {
+    if (!this.user.password) {
+      const newPassword = this.generateRandomPassword()
+      this.$emit('update-user', { password: newPassword })
+    }
+  },
 
-function done() {
-  emit("done");
-}
+  methods: {
+    generateRandomPassword(length = 8) {
+      const chars =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+'
+      let password = ''
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * chars.length)
+        password += chars[randomIndex]
+      }
+      return password
+    },
 
-async function copyPassword() {
-  try {
-    await navigator.clipboard.writeText(props.user.password);
-    copied.value = true;
-    setTimeout(() => {
-      copied.value = false;
-    }, 2000);
-  } catch (err) {
-    console.error("Failed to copy:", err);
+    done() {
+      this.$emit('done')
+    },
+
+    async copyPassword() {
+      try {
+        await navigator.clipboard.writeText(this.user.password)
+        this.copied = true
+        setTimeout(() => {
+          this.copied = false
+        }, 2000)
+      } catch (err) {
+        console.error('Failed to copy:', err)
+      }
+    }
   }
 }
 </script>

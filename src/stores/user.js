@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', {
       },
        {
         username: 'Kavish',
-        password: '9876',
+        password: '1234',
         fullName: 'Kavish Toraskar',
         email: 'Ka@example.com',
         phone: '9999999999',

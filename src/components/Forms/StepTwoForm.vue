@@ -5,7 +5,7 @@
       Step 2: User Details
     </div>
 
-    <!-- Readonly Designation -->
+   
     <q-input
       v-model="form.designation"
       label="Designation"
@@ -13,7 +13,6 @@
       readonly
     />
 
-    <!-- User ID Input -->
     <q-input 
       v-model="form.userId" 
       label="User ID" 
@@ -27,7 +26,7 @@
       lazy-rules
     />
 
-    <!-- Next Button -->
+  
     <div class="row justify-end">
       <q-btn type="submit" label="Next" color="primary" icon="arrow_forward" />
     </div>
@@ -37,10 +36,9 @@
 
 
 <script>
-import { defineComponent, reactive } from 'vue'
 import { useUserStore } from 'src/stores/user'
 
-export default defineComponent({
+export default {
   name: 'StepTwoForm',
 
   props: {
@@ -52,27 +50,33 @@ export default defineComponent({
 
   emits: ['next', 'update-user'],
 
-  setup(props, { emit }) {
-    const userStore = useUserStore()
-    const form = reactive({ ...props.user })
+  data() {
+    return {
+      form: {
+        ...this.user,
+        designation: this.user.designation || 'user'
+      }
+    }
+  },
 
-    const checkUserIdUnique = (val) => {
-      const exists = userStore.users.some(
-        u => u.userId === val && u.username !== props.user.username
+  computed: {
+    userStore() {
+      return useUserStore()
+    }
+  },
+
+  methods: {
+    checkUserIdUnique(val) {
+      const exists = this.userStore.users.some(
+        u => u.userId === val && u.username !== this.user.username
       )
       return exists ? 'User ID already exists' : true
-    }
+    },
 
-    const submit = () => {
-      emit('update-user', { ...form })
-      emit('next')
-    }
-
-    return {
-      form,
-      submit,
-      checkUserIdUnique
+    submit() {
+      this.$emit('update-user', { ...this.form })
+      this.$emit('next')
     }
   }
-})
+}
 </script>

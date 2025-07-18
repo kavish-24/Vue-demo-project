@@ -52,39 +52,45 @@ import { useUserStore } from 'src/stores/user'
 
 export default {
   name: 'StepOneForm',
+
   props: {
     user: {
       type: Object,
       required: true
     }
   },
-  emits: ['next', 'update-user'],
-  setup(props, { emit }) {
-    const form = reactive({ ...props.user })
-    const userStore = useUserStore()
 
-    // 🔎 Validate that username is not taken
-    const checkUsernameUnique = (val) => {
+  emits: ['next', 'update-user'],
+
+  data() {
+    return {
+      form: { ...this.user },
+      userStore: useUserStore()
+    }
+  },
+
+  methods: {
+    checkUsernameUnique(val) {
       if (!val) return 'Required'
-      const exists = userStore.users.some(
-        u => u.username === val && u.username !== props.user.username
+      const exists = this.userStore.users.some(
+        u => u.username === val && u.username !== this.user.username
       )
       return exists ? 'Username already exists' : true
-    }
-    const checkEmailUnique = (val) => {
+    },
+
+    checkEmailUnique(val) {
       if (!val) return 'Required'
-      const exists = userStore.users.some(
-        u => u.email === val && u.email !== props.user.email
+      const exists = this.userStore.users.some(
+        u => u.email === val && u.email !== this.user.email
       )
       return exists ? 'Email Already Registered' : true
-    }
+    },
 
-    function submit() {
-      emit('update-user', { ...form })
-      emit('next')
+    submit() {
+      this.$emit('update-user', { ...this.form })
+      this.$emit('next')
     }
-
-    return { form, submit, checkUsernameUnique,checkEmailUnique }
   }
 }
 </script>
+

@@ -5,7 +5,7 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'LoginPage', // ✅ name this so we can check `from.name`
+        name: 'LoginPage', 
         component: () => import('pages/LoginPage.vue')
       },
       {

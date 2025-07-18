@@ -4,16 +4,17 @@
       <div class="text-h6 text-primary">👥 All Users</div>
       <q-space />
       <q-input
-        v-model="search"
-        filled
-        dense
-        debounce="200"
-        placeholder="Search by username, email, or user ID..."
-        class="q-ml-sm"
-        prepend-inner-icon="search"
-        clearable
-        style="max-width: 300px"
-      />
+  v-model="searchInput"
+  filled
+  dense
+  placeholder="Search by username, email, or user ID..."
+  class="q-ml-sm"
+  prepend-inner-icon="search"
+  clearable
+  style="max-width: 300px"
+  @keyup.enter="applySearch"
+/>
+
     </div>
 
     <q-table
@@ -96,7 +97,8 @@ export default {
 
   data() {
     return {
-      search: '',
+      searchInput: '',
+    search: '',
       editDialog: false,
       isPwdVisible: false,
       editUserData: {
@@ -158,7 +160,11 @@ export default {
         this.userStore.users[index] = { ...this.editUserData }
       }
       this.editDialog = false
-    }
+    },
+    applySearch() {
+  this.search = this.searchInput.trim().toLowerCase();
+}
+
   },
 
   mounted() {

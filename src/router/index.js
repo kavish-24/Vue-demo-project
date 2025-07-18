@@ -28,12 +28,12 @@ Router.beforeEach((to, from, next) => {
   const isLoginPage = to.name === 'LoginPage'
   const cameFromLoginPage = from.name === 'LoginPage'
 
-  // ❌ Not logged in and trying to access a protected page
+  
   if (!isLoggedIn && to.meta.requiresAuth) {
     return next({ name: 'LoginPage' })
   }
 
-  // ✅ Enforce: must come from login page to access dashboards
+  
   if (
     isLoggedIn &&
     (to.name === 'AdminDashboard' || to.name === 'UserDashboard') &&

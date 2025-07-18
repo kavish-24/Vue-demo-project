@@ -2,7 +2,7 @@
   <q-page class="flex flex-center bg-grey-2">
     <q-card class="q-pa-lg shadow-2" style="width: 350px; max-width: 90vw">
       <q-card-section class="text-h6 text-primary text-center">
-        🔐Login
+        🔐 Login
       </q-card-section>
 
       <q-separator />
@@ -13,25 +13,29 @@
           v-model="username"
           label="Username"
           dense
+          ref="usernameRef"
           :rules="[val => !!val || 'Username is required']"
+          @keyup.enter="$refs.passwordRef.focus()"
         />
-       <q-input
-  filled
-  v-model="password"
-  label="Password"
-  :type="isPwdVisible ? 'text' : 'password'"
-  dense
-  :rules="[val => !!val || 'Password is required']"
->
-  <template v-slot:append>
-    <q-icon
-      :name="isPwdVisible ? 'visibility' : 'visibility_off'"
-      class="cursor-pointer"
-      @click="isPwdVisible = !isPwdVisible"
-    />
-  </template>
-</q-input>
 
+        <q-input
+          filled
+          v-model="password"
+          label="Password"
+          :type="isPwdVisible ? 'text' : 'password'"
+          dense
+          ref="passwordRef"
+          :rules="[val => !!val || 'Password is required']"
+          @keyup.enter="handleLogin"
+        >
+          <template v-slot:append>
+            <q-icon
+              :name="isPwdVisible ? 'visibility' : 'visibility_off'"
+              class="cursor-pointer"
+              @click="isPwdVisible = !isPwdVisible"
+            />
+          </template>
+        </q-input>
 
         <q-btn
           label="Login"
@@ -70,7 +74,6 @@ export default {
   },
 
   created() {
-    // 🔐 Force logout as soon as login page loads
     const store = useUserStore()
     store.logout()
   },
@@ -84,7 +87,7 @@ export default {
         return
       }
 
-      // ✅ Mark this tab as logged in
+     
       sessionStorage.setItem('currentUser', JSON.stringify(user))
       sessionStorage.setItem('loggedIn', 'true')
 

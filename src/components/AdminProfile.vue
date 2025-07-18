@@ -1,7 +1,5 @@
 <template>
   <div class="q-pa-md">
-
-    <!-- Header -->
     <div class="row items-center q-mb-sm">
       <div class="text-subtitle1 text-bold text-primary">👤 Profile</div>
       <q-space />
@@ -9,8 +7,6 @@
     </div>
 
     <q-separator />
-
-    <!-- Profile Info -->
     <div class="text-center q-my-md">
       <q-avatar icon="account_circle" color="primary" text-color="white" size="56px" class="q-mb-sm" />
       <div class="text-h6 text-primary">{{ user.fullName }}</div>
@@ -25,23 +21,21 @@
       <div><b>Email:</b> {{ user.email }}</div>
       <div><b>Phone:</b> {{ user.phone }}</div>
       <div><b>Designation:</b> {{ user.designation }}</div>
-      <div v-if="user.designation === 'user'"><b>User ID:</b> {{ user.userId }}</div>
-      <div class="row items-center q-gutter-sm">
-        <div><b>Password:</b> {{ isPwdVisible ? user.password : '••••••••' }}</div>
-        <q-icon
+      <div class>
+        <div><b>Password:</b> {{ isPwdVisible ? user.password : '••••••••' }} <q-icon
           :name="isPwdVisible ? 'visibility' : 'visibility_off'"
           class="cursor-pointer"
           @click="isPwdVisible = !isPwdVisible"
-        />
+        /></div>       
       </div>
     </div>
 
-    <!-- Action Button -->
+   
     <div class="row justify-center q-mt-md">
       <q-btn label="Edit Profile" color="primary" icon="edit" @click="editUser(user)" />
     </div>
 
-    <!-- ✏️ Edit Dialog -->
+  
     <q-dialog v-model="editDialog" persistent>
       <q-card style="min-width: 400px;">
         <q-card-section class="q-gutter-md">
